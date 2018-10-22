@@ -33,12 +33,12 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         finalURL = baseURL + currencyArray[row]
+        getBitcoinData(URL: finalURL)
     }
     override func viewDidLoad() {
         super.viewDidLoad()
         currencyPicker.delegate = self
         currencyPicker.dataSource = self
-        // Do any additional setup after loading the view, typically from a nib.
     }
     func getBitcoinData(URL: String) {
         Alamofire.request(URL, method: .get).responseJSON {
@@ -55,9 +55,10 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     }
     
     func updateBitcoinData(json: JSON) {
-        if let bitcointResult = json["ask"].double {
+        if let bitcointResult = json["averages"]["day"].double {
             bitcoinPriceLabel.text = String(bitcointResult)
         } else {
+            print("Price Unavailable")
             bitcoinPriceLabel.text = "Price Unavailable"
         }
     }
